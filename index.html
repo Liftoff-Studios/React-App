@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<!--
+
+
+I was learning React.js, currently learning Redux as a complimentary course to React.js
+
+Made using React and CSS
+It is a scalable application that can easily be maintained :D
+On the way to becoming a full stack dev. Still a long way though
+
+Support me by subbing to me :D
+May take a bit of time
+API is slowing it by 1-2 seconds
+-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Khanstagram</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap" rel="stylesheet">
+        <style>
+            body{
+                background: url("https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Square_and_colors_a.svg/640px-Square_and_colors_a.svg.png");  
+                background-attachment:fixed;
+                font-family: 'Montserrat', sans-serif;
+                font-weight:700;
+            }
+            .comment{
+                display:grid;
+                grid-template-rows:1fr;
+                grid-template-columns:4fr 1fr 1fr;
+                grid-column-gap:20px;
+                background-color: rgba(255, 255, 255, 0.3);  
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(5px);
+                font-weight:bold;
+                border:1px black solid;
+                padding:12px;
+                border-radius:6px;
+                margin:0px;
+                margin-bottom:7px;
+                cursor:pointer;
+                transition-duration:0.2s;
+            }
+            .comment:hover{
+                transform:scale(1.01);
+                transition-duration:0.2s;
+            }
+            .center{
+                text-align:center;
+            }
+            .fa-arrow-left{
+                position:fixed;
+                top:12px;
+                left:12px;
+                font-size:20px;
+                font-weight:lighter;
+                color:rgb(61, 60, 61);
+                cursor:pointer;
+            }
+            .italics{
+                
+            }
+        </style>
+    </head>
+    <body>
+    <div id="root"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.0.0-alpha-5b57bc6e3-20210921/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.3/purify.min.js"></script>
+    <script type="text/babel">
+        
+        
+        /**Thanks to Quinn Hardbrook for this**/
+        function timeSince(datePosted) {
+                var timePosted = {
+                    v : datePosted,
+                    year : datePosted.slice(0, 4),
+                    month : datePosted.slice(5, 7),
+                    day : datePosted.slice(8, 10),
+                    hour : datePosted.slice(11, 13),
+                    min : datePosted.slice(14, 16),
+                    sec : datePosted.slice(17, 19),
+                };
+                
+                
+                var dateNow = new Date().toUTCString();
+                var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                
+                var timeNow = {
+                    v : dateNow,
+                    year : dateNow.slice(12, 16),
+                    month : months.indexOf(dateNow.slice(8, 11)) < 10 ? "0" + (months.indexOf(dateNow.slice(8, 11)) + 1) : String(months.indexOf(dateNow.slice(8, 11)) + 1),
+                    day : dateNow.slice(5, 7),
+                    hour : dateNow.slice(17, 19),
+                    min : dateNow.slice(20, 22),
+                    sec : dateNow.slice(23, 25)
+                };
+                    
+                    
+                var timeSince = {
+                    year : timeNow.year - timePosted.year,
+                    month : timeNow.month - timePosted.month,
+                    day : timeNow.day - timePosted.day,
+                    hour : timeNow.hour - timePosted.hour,
+                    min : timeNow.min - timePosted.min,
+                    sec : timeNow.sec - timePosted.sec,
+                };
+                
+                
+                if(timeSince.month < 0) {
+                    timeSince.year --;
+                    timeSince.month += 12;
+                }
+                if(timeSince.day < 0) {
+                    timeSince.month--;
+                    timeSince.day += 30;
+                }
+                if(timeSince.hour < 0) {
+                    timeSince.day--;
+                    timeSince.hour += 24;
+                }
+                if(timeSince.min < 0) {
+                    timeSince.hour--;
+                    timeSince.min += 60;
+                }
+                if(timeSince.sec < 0) {
+                    timeSince.min--;
+                    timeSince.sec += 60;
+                }
+                
+                
+                var timeSincePosted;
+                
+                
+                if(timeSince.year > 0) {
+                    timeSincePosted = timeSince.year + (timeSince.year === 1 ? " year ago" : " years ago");
+                } else {
+                    if(timeSince.month > 0) {
+                        timeSincePosted = timeSince.month + (timeSince.month === 1 ? " month ago" : " months ago");
+                    } else {
+                        if(timeSince.day > 0) {
+                            timeSincePosted = timeSince.day + (timeSince.day === 1 ? " day ago" : " days ago");
+                        } else {
+                            if(timeSince.hour > 0) {
+                                timeSincePosted = timeSince.hour + (timeSince.hour === 1 ? " hour ago" : " hours ago");
+                            } else {
+                                if(timeSince.min > 0) {
+                                    timeSincePosted = timeSince.min + (timeSince.min === 1 ? " minute ago" : " minutes ago");
+                                } else {
+                                    timeSincePosted = "A few seconds ago";
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                return timeSincePosted;
+            }
+        
+            function cleanseText(text) {
+                text = text.replace(/</g, "&lt");
+                
+                text = text.replace(/(https:\/\/[^\s\n]+)/gi, "<a href = \"$1\" target = \"_blank\">$1</a>");
+                
+                text = text.replace(/\n/g, "<br>");
+                
+                text = text.replace(/\_([^\_]+)\_/g, "<em>$1</em>");
+                
+                text = text.replace(/\*([^\*]+)\*/g, "<strong>$1</strong>");
+                
+                text = text.replace(/```([^`]+)```/g, "<code>$1</code>");
+                
+                text = text.replace(/\`([^\`]+)\`/g, "<code style = \"display : inline;\">$1</code>");
+                
+                
+                return text;
+            }
+    
+        let Comment = (props)=>{
+            return  <div className="comment" onClick={()=>props.handl(props.id)}>
+                        <span className="comment-content">{props.content}</span>
+                        <span className="comment-author">{props.author}</span>
+                        <span>{props.time}</span>
+                    </div>;
+        }
+    
+        class MainContainer extends React.Component{
+            constructor(props){
+                super(props)
+                this.state = {
+                    isIndiPage:false,
+                    mPageId:null,
+                    comments:[
+                        
+                    ]
+                }
+                this.handleClick = this.handleClick.bind(this);
+                this.goBack = this.goBack.bind(this);
+                 this.componentWillMount = this.componentWillMount.bind(this);
+            }
+            componentWillMount(){
+                $.getJSON("https://www.khanacademy.org/api/internal/discussions/scratchpad/6561889337262080/comments?callback=?&limit=10000",(data)=>{
+                    console.log(data)
+                    for(let j=0;j<data.feedback.length;j++){
+                    if(data.feedback[j].content.split("")[0].includes("^")){
+                        let zo = data.feedback[j].content.split("^")
+                        if(zo.length==3){
+                            let title = zo[1];
+                            let subytext = cleanseText(zo[2]);
+                            let author = data.feedback[j].authorNickname;
+                            let datey =  timeSince(data.feedback[j].date);
+                            let obj = {
+                                id:Math.random(),
+                                content:title,
+                                subText:subytext,
+                                author:author,
+                                time:datey
+                            }
+                            this.setState((prev,pr)=>({
+                                comments:[...prev.comments,obj]
+                            }))
+                        }
+                    }
+                    
+                    }   
+                })
+            }
+            handleClick(id){
+                this.setState((prev,prop)=>({
+                    isIndiPage:true,
+                    mPageId:id
+                }))
+                
+            }
+            goBack(){
+                this.setState({isIndiPage:false})
+            }
+            render(){
+                let cropLength = 26;
+                if(this.state.isIndiPage==false){
+                    let postsArr = this.state.comments.map((co,ind)=>{
+                        console.log(co)
+                        let cocont = co.content.split("").filter((col,indi)=>{
+                            return indi<cropLength;
+                        }).join("");
+                        
+                        return <Comment content={cocont+"....."} author={co.author} time={co.time} id={co.id} handl={this.handleClick}/>
+                    })
+                    return (<div>{postsArr}</div>)
+                }
+                else{
+                    for(var i = 0;i<this.state.comments.length;i++){
+                        if(this.state.comments[i].id==this.state.mPageId){
+                           let joker = this.state.comments[i].subText;
+                            return <div style={{"backgroundColor":"rgba(255, 255, 255,0.6)","backdropFilter":"blur(7px)","padding":"10px","minHeight":"90vh"}}>
+                            <br/>
+                                <div className="center title-m"><h2><b>{this.state.comments[i].content}&nbsp;&nbsp;<small>(By {this.state.comments[i].author})</small></b></h2></div>
+                                <div className="mpa-text"  dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(joker,{ALLOWED_TAGS: ["br","b","em","strong","i","code"]})}}></div>
+                                
+                                <div onClick={this.goBack}><i className="fa fa-arrow-left"></i></div>
+                            </div>    
+                        }   
+                    }
+                }
+               
+            }
+        }
+        
+        ReactDOM.render(<MainContainer/>,document.getElementById("root"))
+    </script>
+    <script></script>
+    </body>
+</html>
